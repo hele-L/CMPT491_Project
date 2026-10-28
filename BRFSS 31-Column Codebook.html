@@ -1,0 +1,1156 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>BRFSS 31-Column Codebook</title>
+<style>
+:root {
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --surface-2: #f1efe8;
+  --border: #e0dcd0;
+  --text: #24261f;
+  --text-muted: #6b6a5e;
+  --accent: #1f6f5c;
+  --accent-soft: #e4efe9;
+  --mono-bg: #f1f0e9;
+  --green: #2f9e6e;
+  --green-bg: #e5f5ec;
+  --red: #c0392b;
+  --red-bg: #fbebe9;
+  --amber: #b5790f;
+  --amber-bg: #fbf1de;
+  color-scheme: light;
+}
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    --bg: #16181a;
+    --surface: #1e2124;
+    --surface-2: #26292c;
+    --border: #34383c;
+    --text: #e9e8e2;
+    --text-muted: #9a9a90;
+    --accent: #5fcf9f;
+    --accent-soft: #1d3129;
+    --mono-bg: #22252770;
+    --green: #5fcf9f;
+    --green-bg: #16281f;
+    --red: #ff9186;
+    --red-bg: #2c1917;
+    --amber: #f0b64f;
+    --amber-bg: #2b2312;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16181a;
+  --surface: #1e2124;
+  --surface-2: #26292c;
+  --border: #34383c;
+  --text: #e9e8e2;
+  --text-muted: #9a9a90;
+  --accent: #5fcf9f;
+  --accent-soft: #1d3129;
+  --mono-bg: #22252770;
+  --green: #5fcf9f;
+  --green-bg: #16281f;
+  --red: #ff9186;
+  --red-bg: #2c1917;
+  --amber: #f0b64f;
+  --amber-bg: #2b2312;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0 16px;
+  line-height: 1.5;
+}
+.mono, .var-meta, .recode-table, table.vtable, .mono-inline {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+}
+h1, h2, h3, .var-name { font-family: 'Fraunces', Georgia, serif; }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 60px; }
+
+header.page-head {
+  padding-bottom: 22px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 8px;
+}
+header.page-head h1 {
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  margin: 0 0 6px;
+  font-weight: 600;
+  text-wrap: balance;
+}
+header.page-head p { color: var(--text-muted); margin: 4px 0; max-width: 68ch; }
+
+.legend {
+  display: flex; flex-wrap: wrap; gap: 10px 18px;
+  margin-top: 14px; font-size: 0.85rem; color: var(--text-muted);
+  align-items: center;
+}
+.legend .dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:-1px; }
+
+.limits-box {
+  background: var(--amber-bg);
+  border: 1px solid color-mix(in srgb, var(--amber) 40%, transparent);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 18px 0 24px;
+  font-size: 0.92rem;
+}
+.limits-box b { color: var(--amber); }
+
+.layout { display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: start; }
+@media (max-width: 820px) { .layout { grid-template-columns: 1fr; } }
+
+nav.toc {
+  position: sticky; top: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+}
+@media (max-width: 820px) { nav.toc { position: static; max-height: none; } }
+nav.toc .toc-head { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 8px; }
+.toc-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 8px; border-radius: 6px;
+  color: var(--text); text-decoration: none; font-size: 0.86rem;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.toc-item:hover { background: var(--surface-2); }
+.toc-num { color: var(--text-muted); font-size: 0.75rem; width: 1.4em; }
+.toc-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex: none; }
+
+main { min-width: 0; }
+
+.var-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px 22px;
+  margin-bottom: 20px;
+  scroll-margin-top: 14px;
+}
+.var-name-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.serial { color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; }
+.var-name { font-size: 1.4rem; margin: 0; font-weight: 600; }
+.badge {
+  margin-left: auto;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
+  padding: 3px 10px; border-radius: 999px;
+  color: var(--badge-color);
+  background: color-mix(in srgb, var(--badge-color) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--badge-color) 35%, transparent);
+  white-space: nowrap;
+}
+.var-label { font-size: 1.02rem; color: var(--text); margin: 6px 0 4px; font-weight: 600; }
+.var-meta { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px; }
+.var-question { font-size: 0.92rem; color: var(--text-muted); font-style: italic; margin-bottom: 14px; }
+
+.name-history { margin: 10px 0 14px; }
+.nh-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 6px; }
+.nh-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: 7px; padding: 3px 8px;
+}
+.chip b { color: var(--text-muted); font-weight: 600; margin-right: 5px; }
+.chip-change { border-color: var(--accent); background: var(--accent-soft); }
+
+.finding-note { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+.finding-detail { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px; }
+
+.recode-box, .spot-check, .plain-note {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 10px 0 14px;
+  font-size: 0.88rem;
+}
+.recode-title, .spot-title { font-weight: 600; margin-bottom: 6px; font-size: 0.85rem; }
+.recode-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 6px; }
+.recode-table td, .recode-table th { padding: 4px 8px; border-bottom: 1px solid var(--border); }
+.spot-note, .plain-note { color: var(--text-muted); }
+.spot-check .vtable { margin-top: 8px; }
+
+.table-caption { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 4px 0 6px; }
+
+table.vtable {
+  width: 100%; border-collapse: collapse; font-size: 0.85rem;
+  background: var(--surface);
+}
+table.vtable th {
+  text-align: left; background: var(--surface-2);
+  padding: 7px 10px; border-bottom: 2px solid var(--border);
+  font-weight: 600; white-space: nowrap;
+}
+table.vtable td { padding: 6px 10px; border-bottom: 1px solid var(--border); }
+table.vtable tr:last-child td { border-bottom: none; }
+.table-wrap { overflow-x: auto; }
+
+.big-table > summary {
+  cursor: pointer; font-size: 0.85rem; color: var(--accent); margin-bottom: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.race-warning {
+  background: var(--red-bg); color: var(--red);
+  border: 1px solid color-mix(in srgb, var(--red) 35%, transparent);
+  border-radius: 8px; padding: 8px 12px; font-size: 0.85rem; margin-bottom: 10px;
+}
+
+footer { margin-top: 30px; color: var(--text-muted); font-size: 0.82rem; text-align: center; }
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+
+<div class="wrap">
+  <header class="page-head">
+    <h1>BRFSS Codebook — 31 Selected Columns (2019–2025)</h1>
+    <p>Consolidated reference for the diabetes risk-factor project. Value labels and frequencies are shown for
+    all 7 years, 2019 through 2025 &mdash; all 31 columns, complete value tables. INCOME3 and _HLTHPL2 additionally
+    show a separate historical table for 2019-2020, since those two switched to a genuinely different coding scheme
+    in 2021. _RACE's 2022 column is sourced from that year's comparable _RACE1 variable, not the separate,
+    further-collapsed _RACEGR4 (see the note on that page).
+    Percentages are omitted &mdash; frequency counts only. The dot next to each column in the sidebar shows its
+    verification status (see legend below).</p>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--green)"></span>Stable name / verified identical across years</span>
+      <span><span class="dot" style="background:var(--red)"></span>Verified DIFFERENT — real definition change</span>
+      <span><span class="dot" style="background:var(--amber)"></span>Not fully verified</span>
+    </div>
+  </header>
+
+  <div class="limits-box">
+    <b>What this covers:</b> All 7 years (2019-2025) are now fully parsed &mdash; all 31 columns, complete value
+    tables, matched year-to-year by value code. 2019's source is CDC's live HTML codebook page rather than a
+    naturally paginated PDF; its eight calculated/computed variables (_URBSTAT, _MICHD, _RACE, _SEX, _AGEG5YR,
+    _BMI5, _RFDRHV9, _TOTINDA) were transcribed separately from that same page. INCOME3 and _HLTHPL2 changed to a
+    non-comparable coding scheme starting in 2021, so 2019-2020 are shown in a separate historical table on those
+    two pages instead of being merged into the main one. _RACE's 2022 figures come from that year's _RACE1 variable
+    (the one comparable to other years' 8-category _RACE), not the separate, further-collapsed 5-category _RACEGR4
+    &mdash; see the note on that page.
+  </div>
+
+  <div class="layout">
+    <nav class="toc">
+      <div class="toc-head">31 Columns</div>
+      <a href="#_STATE" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">01</span>_STATE</a><a href="#IYEAR" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">06</span>IYEAR</a><a href="#GENHLTH" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">30</span>GENHLTH</a><a href="#PHYSHLTH" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">31</span>PHYSHLTH</a><a href="#MENTHLTH" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">32</span>MENTHLTH</a><a href="#PERSDOC3" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Verified identical"></span><span class="toc-num">35</span>PERSDOC3</a><a href="#MEDCOST1" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Verified identical"></span><span class="toc-num">36</span>MEDCOST1</a><a href="#CHECKUP1" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">37</span>CHECKUP1</a><a href="#CVDSTRK3" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">43</span>CVDSTRK3</a><a href="#ADDEPEV3" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">49</span>ADDEPEV3</a><a href="#CHCKDNY2" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">50</span>CHCKDNY2</a><a href="#HAVARTH4" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Verified identical"></span><span class="toc-num">51</span>HAVARTH4</a><a href="#DIABETE4" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Verified identical"></span><span class="toc-num">52</span>DIABETE4</a><a href="#MARITAL" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">54</span>MARITAL</a><a href="#EDUCA" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">55</span>EDUCA</a><a href="#RENTHOM1" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">56</span>RENTHOM1</a><a href="#VETERAN3" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">60</span>VETERAN3</a><a href="#EMPLOY1" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">61</span>EMPLOY1</a><a href="#INCOME3" class="toc-item"><span class="toc-dot" style="background:#c0392b" title="Verified DIFFERENT"></span><span class="toc-num">63</span>INCOME3</a><a href="#DIFFWALK" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">70</span>DIFFWALK</a><a href="#SMOKE100" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">93</span>SMOKE100</a><a href="#ALCDAY4" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Verified identical"></span><span class="toc-num">102</span>ALCDAY4</a><a href="#_URBSTAT" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">215</span>_URBSTAT</a><a href="#_HLTHPL2" class="toc-item"><span class="toc-dot" style="background:#c0392b" title="Verified DIFFERENT"></span><span class="toc-num">233</span>_HLTHPL2</a><a href="#_TOTINDA" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">235</span>_TOTINDA</a><a href="#_MICHD" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">239</span>_MICHD</a><a href="#_RACE" class="toc-item"><span class="toc-dot" style="background:#c0392b" title="Verified DIFFERENT"></span><span class="toc-num">246</span>_RACE</a><a href="#_SEX" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">250</span>_SEX</a><a href="#_AGEG5YR" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">251</span>_AGEG5YR</a><a href="#_BMI5" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Stable name"></span><span class="toc-num">258</span>_BMI5</a><a href="#_RFDRHV9" class="toc-item"><span class="toc-dot" style="background:#2f9e6e" title="Verified identical"></span><span class="toc-num">298</span>_RFDRHV9</a>
+    </nav>
+    <main>
+      
+    <section class="var-card" id="_STATE">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#1</span>
+          <h2 class="var-name">_STATE</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">State FIPS Code</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Record Identification</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">State FIPS Code</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">_STATE</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">State FIPS coding is a fixed national standard.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <details class="big-table" open><summary>53 categories — click to collapse</summary><div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Alabama</td><td>7,052</td><td>5,341</td><td>4,586</td><td>4,506</td><td>4,362</td><td>5,092</td><td>4,171</td></tr><tr><td>2</td><td>Alaska</td><td>2,977</td><td>3,675</td><td>5,493</td><td>5,865</td><td>5,525</td><td>5,496</td><td>5,537</td></tr><tr><td>4</td><td>Arizona</td><td>8,941</td><td>10,291</td><td>10,654</td><td>10,185</td><td>12,036</td><td>8,588</td><td>5,374</td></tr><tr><td>5</td><td>Arkansas</td><td>5,359</td><td>5,244</td><td>5,372</td><td>5,309</td><td>5,351</td><td>5,344</td><td>5,119</td></tr><tr><td>6</td><td>California</td><td>11,613</td><td>4,798</td><td>6,735</td><td>10,952</td><td>11,976</td><td>8,382</td><td>—</td></tr><tr><td>8</td><td>Colorado</td><td>9,317</td><td>10,184</td><td>10,476</td><td>9,365</td><td>8,783</td><td>10,897</td><td>9,437</td></tr><tr><td>9</td><td>Connecticut</td><td>9,163</td><td>8,982</td><td>8,341</td><td>9,784</td><td>9,501</td><td>7,213</td><td>7,444</td></tr><tr><td>10</td><td>Delaware</td><td>3,897</td><td>4,025</td><td>3,640</td><td>3,987</td><td>4,282</td><td>4,360</td><td>4,202</td></tr><tr><td>11</td><td>District of Columbia</td><td>2,624</td><td>3,428</td><td>3,198</td><td>3,237</td><td>3,207</td><td>3,198</td><td>2,622</td></tr><tr><td>12</td><td>Florida</td><td>16,959</td><td>11,799</td><td>—</td><td>13,393</td><td>13,255</td><td>13,086</td><td>13,458</td></tr><tr><td>13</td><td>Georgia</td><td>7,354</td><td>9,090</td><td>8,186</td><td>9,236</td><td>8,227</td><td>7,262</td><td>6,191</td></tr><tr><td>15</td><td>Hawaii</td><td>7,684</td><td>7,754</td><td>7,787</td><td>7,747</td><td>7,832</td><td>6,636</td><td>7,371</td></tr><tr><td>16</td><td>Idaho</td><td>5,474</td><td>5,986</td><td>6,788</td><td>6,280</td><td>6,895</td><td>4,354</td><td>3,588</td></tr><tr><td>17</td><td>Illinois</td><td>5,512</td><td>3,687</td><td>3,210</td><td>4,056</td><td>5,279</td><td>11,980</td><td>11,219</td></tr><tr><td>18</td><td>Indiana</td><td>8,894</td><td>8,480</td><td>9,929</td><td>10,466</td><td>10,993</td><td>13,050</td><td>6,550</td></tr><tr><td>19</td><td>Iowa</td><td>9,803</td><td>9,663</td><td>9,625</td><td>8,949</td><td>8,876</td><td>8,735</td><td>8,051</td></tr><tr><td>20</td><td>Kansas</td><td>11,368</td><td>10,527</td><td>17,565</td><td>11,247</td><td>9,884</td><td>10,888</td><td>9,912</td></tr><tr><td>21</td><td>Kentucky</td><td>7,974</td><td>3,934</td><td>5,429</td><td>4,023</td><td>—</td><td>7,470</td><td>7,459</td></tr><tr><td>22</td><td>Louisiana</td><td>4,718</td><td>4,760</td><td>5,102</td><td>5,629</td><td>5,388</td><td>4,547</td><td>4,899</td></tr><tr><td>23</td><td>Maine</td><td>11,373</td><td>11,015</td><td>11,808</td><td>10,646</td><td>12,255</td><td>12,144</td><td>12,206</td></tr><tr><td>24</td><td>Maryland</td><td>17,419</td><td>14,292</td><td>15,627</td><td>16,418</td><td>17,255</td><td>14,462</td><td>12,943</td></tr><tr><td>25</td><td>Massachusetts</td><td>7,731</td><td>7,181</td><td>7,683</td><td>11,029</td><td>9,528</td><td>9,485</td><td>9,497</td></tr><tr><td>26</td><td>Michigan</td><td>10,518</td><td>7,269</td><td>9,425</td><td>10,058</td><td>9,978</td><td>11,419</td><td>10,173</td></tr><tr><td>27</td><td>Minnesota</td><td>15,539</td><td>15,835</td><td>15,959</td><td>16,821</td><td>16,170</td><td>15,199</td><td>14,632</td></tr><tr><td>28</td><td>Mississippi</td><td>5,126</td><td>6,479</td><td>4,421</td><td>4,239</td><td>4,069</td><td>2,986</td><td>—</td></tr><tr><td>29</td><td>Missouri</td><td>7,304</td><td>9,203</td><td>12,266</td><td>7,438</td><td>7,219</td><td>7,309</td><td>5,939</td></tr><tr><td>30</td><td>Montana</td><td>6,495</td><td>6,315</td><td>6,243</td><td>7,048</td><td>7,143</td><td>6,816</td><td>5,853</td></tr><tr><td>31</td><td>Nebraska</td><td>15,869</td><td>14,796</td><td>14,923</td><td>7,473</td><td>12,886</td><td>12,671</td><td>6,968</td></tr><tr><td>32</td><td>Nevada</td><td>2,779</td><td>2,480</td><td>2,739</td><td>3,188</td><td>2,650</td><td>2,662</td><td>—</td></tr><tr><td>33</td><td>New Hampshire</td><td>5,856</td><td>—</td><td>6,536</td><td>6,757</td><td>6,960</td><td>6,981</td><td>5,997</td></tr><tr><td>34</td><td>New Jersey</td><td>—</td><td>—</td><td>7,965</td><td>8,209</td><td>9,328</td><td>8,666</td><td>6,739</td></tr><tr><td>35</td><td>New Mexico</td><td>5,975</td><td>—</td><td>6,362</td><td>4,758</td><td>3,220</td><td>3,393</td><td>3,413</td></tr><tr><td>36</td><td>New York</td><td>14,232</td><td>—</td><td>39,095</td><td>17,800</td><td>17,349</td><td>43,913</td><td>14,876</td></tr><tr><td>37</td><td>North Carolina</td><td>4,287</td><td>—</td><td>4,939</td><td>4,505</td><td>4,088</td><td>4,325</td><td>3,529</td></tr><tr><td>38</td><td>North Dakota</td><td>5,534</td><td>—</td><td>5,909</td><td>4,153</td><td>5,745</td><td>5,860</td><td>5,729</td></tr><tr><td>39</td><td>Ohio</td><td>13,536</td><td>—</td><td>14,308</td><td>16,487</td><td>13,384</td><td>10,180</td><td>9,000</td></tr><tr><td>40</td><td>Oklahoma</td><td>6,335</td><td>—</td><td>5,451</td><td>5,775</td><td>6,727</td><td>7,063</td><td>4,196</td></tr><tr><td>41</td><td>Oregon</td><td>6,112</td><td>—</td><td>5,378</td><td>5,756</td><td>6,234</td><td>6,152</td><td>4,732</td></tr><tr><td>42</td><td>Pennsylvania</td><td>6,606</td><td>—</td><td>6,419</td><td>4,582</td><td>—</td><td>3,513</td><td>3,017</td></tr><tr><td>44</td><td>Rhode Island</td><td>6,110</td><td>—</td><td>5,609</td><td>5,893</td><td>5,781</td><td>5,467</td><td>5,435</td></tr><tr><td>45</td><td>South Carolina</td><td>7,146</td><td>—</td><td>10,057</td><td>10,037</td><td>10,038</td><td>9,485</td><td>4,137</td></tr><tr><td>46</td><td>South Dakota</td><td>6,630</td><td>—</td><td>7,290</td><td>7,424</td><td>5,886</td><td>5,855</td><td>4,135</td></tr><tr><td>48</td><td>Texas</td><td>12,297</td><td>—</td><td>10,815</td><td>14,245</td><td>10,059</td><td>12,291</td><td>6,250</td></tr><tr><td>49</td><td>Utah</td><td>11,792</td><td>—</td><td>10,621</td><td>9,826</td><td>11,154</td><td>12,782</td><td>11,232</td></tr><tr><td>50</td><td>Vermont</td><td>6,457</td><td>—</td><td>6,580</td><td>8,811</td><td>7,636</td><td>6,520</td><td>6,468</td></tr><tr><td>51</td><td>Virginia</td><td>9,952</td><td>—</td><td>9,902</td><td>10,417</td><td>6,981</td><td>6,860</td><td>5,017</td></tr><tr><td>53</td><td>Washington</td><td>12,993</td><td>—</td><td>13,142</td><td>26,152</td><td>26,444</td><td>25,800</td><td>19,499</td></tr><tr><td>54</td><td>West Virginia</td><td>5,301</td><td>—</td><td>6,744</td><td>4,981</td><td>4,339</td><td>5,816</td><td>4,215</td></tr><tr><td>55</td><td>Wisconsin</td><td>4,951</td><td>—</td><td>6,106</td><td>11,276</td><td>12,819</td><td>13,096</td><td>11,687</td></tr><tr><td>56</td><td>Wyoming</td><td>4,630</td><td>—</td><td>4,413</td><td>4,142</td><td>4,484</td><td>4,604</td><td>4,537</td></tr><tr><td>66</td><td>Guam</td><td>2,426</td><td>—</td><td>1,658</td><td>2,266</td><td>1,559</td><td>1,660</td><td>1,928</td></tr><tr><td>72</td><td>Puerto Rico</td><td>6,032</td><td>—</td><td>4,014</td><td>5,509</td><td>4,594</td><td>4,309</td><td>3,844</td></tr><tr><td>78</td><td>Virgin Islands</td><td>—</td><td>—</td><td>1,382</td><td>1,531</td><td>2,064</td><td>1,348</td><td>—</td></tr></tbody></table></div></details>
+    </section>
+    
+    <section class="var-card" id="IYEAR">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#6</span>
+          <h2 class="var-name">IYEAR</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Interview Year</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Record Identification</span>
+          <span><b>Type:</b> Char</span>
+        </div>
+        <div class="var-question">Interview Year</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">IYEAR</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">The interview year itself - values run 2019 through 2025 in the combined dataset (plus a small 2026 tail, explained below). Not tied to any one year's codebook file.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Combined 2019-2025 dataset</th></tr></thead><tbody><tr><td>2019</td><td>2019</td><td>399,618</td></tr><tr><td>2020</td><td>2020</td><td>408,476</td></tr><tr><td>2021</td><td>2021</td><td>427,317</td></tr><tr><td>2022</td><td>2022</td><td>442,981</td></tr><tr><td>2023</td><td>2023</td><td>433,671</td></tr><tr><td>2024</td><td>2024</td><td>463,428</td></tr><tr><td>2025</td><td>2025</td><td>354,465</td></tr></tbody></table></div><div class="plain-note" style="margin-top:10px;">A small tail of interviews conducted in early January of the following year gets counted in that prior year’s annual file (BRFSS convention, not an error) — the combined dataset also has 21,246 rows with IYEAR=2026 for this reason.</div>
+    </section>
+    
+    <section class="var-card" id="GENHLTH">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#30</span>
+          <h2 class="var-name">GENHLTH</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">General Health</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Health Status</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Would you say that in general your health is:</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">GENHLTH</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Core question asked identically for decades; name never changed.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Excellent</td><td>65,946</td><td>81,660</td><td>77,741</td><td>71,878</td><td>63,410</td><td>64,217</td><td>48,860</td></tr><tr><td>2</td><td>Very good</td><td>135,814</td><td>138,139</td><td>149,112</td><td>148,444</td><td>142,115</td><td>145,791</td><td>114,578</td></tr><tr><td>3</td><td>Good</td><td>133,631</td><td>119,502</td><td>137,938</td><td>143,598</td><td>144,209</td><td>156,229</td><td>120,795</td></tr><tr><td>4</td><td>Fair</td><td>59,725</td><td>46,239</td><td>54,736</td><td>60,273</td><td>61,955</td><td>67,919</td><td>53,372</td></tr><tr><td>5</td><td>Poor</td><td>22,105</td><td>15,457</td><td>18,005</td><td>19,741</td><td>20,372</td><td>22,204</td><td>17,589</td></tr><tr><td>7</td><td>Don't know/Not Sure</td><td>741</td><td>650</td><td>788</td><td>810</td><td>897</td><td>915</td><td>685</td></tr><tr><td>9</td><td>Refused</td><td>280</td><td>303</td><td>369</td><td>385</td><td>361</td><td>390</td><td>274</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>26</td><td>8</td><td>4</td><td>3</td><td>4</td><td>5</td><td>5</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="PHYSHLTH">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#31</span>
+          <h2 class="var-name">PHYSHLTH</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Number of Days Physical Health Not Good</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Healthy Days</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Now thinking about your physical health, which includes physical illness and injury, for how many days during the past 30 days was your physical health not good?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">PHYSHLTH</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Coding scheme (1-30 days, 88=None, 77=DK, 99=Refused) unchanged for decades.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1 - 30</td><td>Number of days</td><td>155,367</td><td>114,596</td><td>141,403</td><td>166,386</td><td>165,973</td><td>179,027</td><td>139,914</td></tr><tr><td>88</td><td>None</td><td>252,492</td><td>278,671</td><td>287,796</td><td>267,819</td><td>256,565</td><td>267,576</td><td>207,881</td></tr><tr><td>77</td><td>Don't know/Not sure</td><td>8,855</td><td>7,095</td><td>7,898</td><td>8,875</td><td>9,072</td><td>8,765</td><td>6,809</td></tr><tr><td>99</td><td>Refused</td><td>1,522</td><td>1,591</td><td>1,593</td><td>2,047</td><td>1,710</td><td>2,297</td><td>1,551</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>32</td><td>5</td><td>3</td><td>5</td><td>3</td><td>5</td><td>3</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="MENTHLTH">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#32</span>
+          <h2 class="var-name">MENTHLTH</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Number of Days Mental Health Not Good</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Healthy Days</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Now thinking about your mental health, which includes stress, depression, and problems with emotions, for how many days during the past 30 days was your mental health not good?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">MENTHLTH</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Same core module and coding scheme as PHYSHLTH.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1 - 30</td><td>Number of days</td><td>142,152</td><td>138,322</td><td>159,615</td><td>170,836</td><td>168,189</td><td>179,605</td><td>141,614</td></tr><tr><td>88</td><td>None</td><td>267,337</td><td>255,707</td><td>271,161</td><td>265,229</td><td>257,026</td><td>269,909</td><td>208,060</td></tr><tr><td>77</td><td>Don't know/Not sure</td><td>6,835</td><td>5,833</td><td>5,723</td><td>6,589</td><td>5,992</td><td>5,594</td><td>4,496</td></tr><tr><td>99</td><td>Refused</td><td>1,925</td><td>2,091</td><td>2,192</td><td>2,475</td><td>2,113</td><td>2,559</td><td>1,986</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>19</td><td>5</td><td>2</td><td>3</td><td>3</td><td>3</td><td>2</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="PERSDOC3">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#35</span>
+          <h2 class="var-name">PERSDOC3</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Verified identical</span>
+        </div>
+        <div class="var-label">Have Personal Health Care Provider?</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Health Care Access</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Do you have one person or a group of doctors that you think of as your personal health care provider?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="chip chip-change"><b>2019</b> PERSDOC2</span><span class="chip"><b>2020</b> PERSDOC2</span><span class="chip chip-change"><b>2021</b> PERSDOC3</span><span class="chip"><b>2022</b> PERSDOC3</span><span class="chip"><b>2023</b> PERSDOC3</span><span class="chip"><b>2024</b> PERSDOC3</span><span class="chip"><b>2025</b> PERSDOC3</span></div>
+      </div>
+
+      <div class="finding-note">Renamed: PERSDOC2 (2019-2020) → PERSDOC3 (2021-2025)</div>
+      <div class="finding-detail">Confirmed via full 2019/2020/2021 parses: PERSDOC2 (2019-2020) and PERSDOC3 (2021-2025) use identical categories (one/more than one/no personal doctor, DK, Refused). Pure rename.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Yes, only one</td><td>312,465</td><td>302,667</td><td>257,955</td><td>246,967</td><td>234,388</td><td>242,393</td><td>189,048</td></tr><tr><td>2</td><td>More than one</td><td>33,292</td><td>27,254</td><td>124,323</td><td>136,685</td><td>141,728</td><td>154,558</td><td>121,392</td></tr><tr><td>3</td><td>No</td><td>70,598</td><td>69,995</td><td>52,710</td><td>57,105</td><td>52,973</td><td>56,106</td><td>42,222</td></tr><tr><td>7</td><td>Don't know/Not Sure</td><td>1,379</td><td>1,429</td><td>2,711</td><td>3,270</td><td>3,271</td><td>3,446</td><td>2,635</td></tr><tr><td>9</td><td>Refused</td><td>528</td><td>610</td><td>992</td><td>1,103</td><td>960</td><td>1,164</td><td>859</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>6</td><td>3</td><td>2</td><td>2</td><td>3</td><td>3</td><td>2</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="MEDCOST1">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#36</span>
+          <h2 class="var-name">MEDCOST1</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Verified identical</span>
+        </div>
+        <div class="var-label">Could Not Afford To See Doctor</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Health Care Access</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Was there a time in the past 12 months when you needed to see a doctor but could not because you could not afford it?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="chip chip-change"><b>2019</b> MEDCOST</span><span class="chip"><b>2020</b> MEDCOST</span><span class="chip chip-change"><b>2021</b> MEDCOST1</span><span class="chip"><b>2022</b> MEDCOST1</span><span class="chip"><b>2023</b> MEDCOST1</span><span class="chip"><b>2024</b> MEDCOST1</span><span class="chip"><b>2025</b> MEDCOST1</span></div>
+      </div>
+
+      <div class="finding-note">Renamed: MEDCOST (2019-2020) → MEDCOST1 (2021-2025)</div>
+      <div class="finding-detail">Confirmed via full 2019/2020/2021 parses: MEDCOST (2019-2020) and MEDCOST1 (2021-2025) use the same 4 categories (Yes/No/DK/Refused), same intent. Pure rename.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Yes</td><td>44,377</td><td>34,568</td><td>32,597</td><td>37,227</td><td>37,198</td><td>43,363</td><td>34,602</td></tr><tr><td>2</td><td>No</td><td>372,683</td><td>366,252</td><td>404,732</td><td>406,296</td><td>394,587</td><td>412,634</td><td>320,314</td></tr><tr><td>7</td><td>Don't know/Not sure</td><td>962</td><td>909</td><td>962</td><td>1,157</td><td>1,174</td><td>1,229</td><td>945</td></tr><tr><td>9</td><td>Refused</td><td>239</td><td>226</td><td>397</td><td>448</td><td>362</td><td>438</td><td>295</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>7</td><td>3</td><td>5</td><td>4</td><td>2</td><td>6</td><td>2</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="CHECKUP1">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#37</span>
+          <h2 class="var-name">CHECKUP1</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Length of time since last routine checkup</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Health Care Access</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">About how long has it been since you last visited a doctor for a routine checkup?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">CHECKUP1</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Name unchanged; BRFSS convention is to bump the suffix when categories change.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Within past year (anytime less than 12 months ago)</td><td>333,733</td><td>311,146</td><td>337,289</td><td>350,944</td><td>348,057</td><td>370,023</td><td>291,456</td></tr><tr><td>2</td><td>Within past 2 years (1 year but less than 2 years ago)</td><td>38,487</td><td>45,429</td><td>51,271</td><td>41,919</td><td>38,031</td><td>39,655</td><td>29,081</td></tr><tr><td>3</td><td>Within past 5 years (2 years but less than 5 years ago)</td><td>20,118</td><td>20,448</td><td>23,427</td><td>24,882</td><td>20,970</td><td>21,480</td><td>15,354</td></tr><tr><td>4</td><td>5 or more years ago</td><td>18,658</td><td>17,828</td><td>18,490</td><td>19,079</td><td>17,737</td><td>18,395</td><td>14,318</td></tr><tr><td>7</td><td>Don't know/Not sure</td><td>4,432</td><td>4,445</td><td>5,233</td><td>5,063</td><td>5,168</td><td>4,615</td><td>3,474</td></tr><tr><td>8</td><td>Never</td><td>2,452</td><td>2,082</td><td>2,311</td><td>2,509</td><td>2,747</td><td>2,783</td><td>1,967</td></tr><tr><td>9</td><td>Refused</td><td>378</td><td>575</td><td>670</td><td>733</td><td>611</td><td>717</td><td>506</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>10</td><td>5</td><td>2</td><td>3</td><td>2</td><td>2</td><td>2</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="CVDSTRK3">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#43</span>
+          <h2 class="var-name">CVDSTRK3</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Ever Diagnosed with a Stroke</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Chronic Health Conditions</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">(Ever told) (you had) a stroke.</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">CVDSTRK3</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Name unchanged since before 2019.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Yes</td><td>18,745</td><td>15,677</td><td>17,213</td><td>19,239</td><td>18,350</td><td>20,661</td><td>16,353</td></tr><tr><td>2</td><td>No</td><td>398,213</td><td>385,095</td><td>420,051</td><td>424,336</td><td>413,499</td><td>435,557</td><td>338,597</td></tr><tr><td>7</td><td>Don't know/Not sure</td><td>1,118</td><td>891</td><td>1,130</td><td>1,274</td><td>1,212</td><td>1,244</td><td>1,041</td></tr><tr><td>9</td><td>Refused</td><td>181</td><td>292</td><td>297</td><td>281</td><td>258</td><td>205</td><td>164</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>11</td><td>3</td><td>2</td><td>2</td><td>4</td><td>3</td><td>3</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="ADDEPEV3">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#49</span>
+          <h2 class="var-name">ADDEPEV3</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">(Ever told) you had a depressive disorder</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Chronic Health Conditions</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">(Ever told) (you had) a depressive disorder (including depression, major depression, dysthymia, or minor depression)?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">ADDEPEV3</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Name unchanged since before 2019.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Yes</td><td>79,181</td><td>75,820</td><td>85,398</td><td>91,410</td><td>88,149</td><td>96,125</td><td>74,716</td></tr><tr><td>2</td><td>No</td><td>336,804</td><td>324,035</td><td>350,778</td><td>350,910</td><td>342,587</td><td>358,881</td><td>279,220</td></tr><tr><td>7</td><td>Don't know/Not sure</td><td>1,792</td><td>1,476</td><td>1,814</td><td>2,140</td><td>2,017</td><td>2,066</td><td>1,704</td></tr><tr><td>9</td><td>Refused</td><td>481</td><td>621</td><td>700</td><td>665</td><td>567</td><td>593</td><td>515</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>10</td><td>6</td><td>3</td><td>7</td><td>3</td><td>5</td><td>3</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="CHCKDNY2">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#50</span>
+          <h2 class="var-name">CHCKDNY2</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Ever told you have kidney disease?</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Chronic Health Conditions</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Not including kidney stones, bladder infection or incontinence, were you ever told you had kidney disease?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">CHCKDNY2</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Name unchanged since before 2019.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Yes</td><td>16,276</td><td>15,015</td><td>17,101</td><td>20,315</td><td>20,555</td><td>23,752</td><td>19,215</td></tr><tr><td>2</td><td>No</td><td>400,385</td><td>385,427</td><td>419,779</td><td>422,891</td><td>410,876</td><td>431,939</td><td>335,462</td></tr><tr><td>7</td><td>Don't know / Not sure</td><td>1,392</td><td>1,186</td><td>1,488</td><td>1,581</td><td>1,622</td><td>1,715</td><td>1,293</td></tr><tr><td>9</td><td>Refused</td><td>204</td><td>324</td><td>322</td><td>343</td><td>267</td><td>258</td><td>185</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>11</td><td>6</td><td>3</td><td>2</td><td>3</td><td>6</td><td>3</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="HAVARTH4">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#51</span>
+          <h2 class="var-name">HAVARTH4</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Verified identical</span>
+        </div>
+        <div class="var-label">Told Had Arthritis</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Chronic Health Conditions</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">(Ever told) (you had) some form of arthritis, rheumatoid arthritis, gout, lupus, or fibromyalgia? (Arthritis diagnoses include: rheumatism, polymyalgia rheumatic, osteoarthritis (not osteoporosis), tendonitis, bursitis, bunion, tennis elbow, carpal tunnel syndrome, tarsal tunnel syndrome, joint infection, Reiter's syndrome, ankylosing spondylitis;)</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="chip chip-change"><b>2019</b> HAVARTH4</span><span class="chip"><b>2020</b> HAVARTH4</span><span class="chip chip-change"><b>2021</b> HAVARTH5</span><span class="chip chip-change"><b>2022</b> HAVARTH4</span><span class="chip"><b>2023</b> HAVARTH4</span><span class="chip"><b>2024</b> HAVARTH4</span><span class="chip"><b>2025</b> HAVARTH4</span></div>
+      </div>
+
+      <div class="finding-note">Renamed: HAVARTH4 (2019-2020) → HAVARTH5 (2021 ONLY) → HAVARTH4 (2022-2025)</div>
+      <div class="finding-detail">Confirmed via full 2019/2020/2021 parses: HAVARTH4 (2019-2020, 2022-2025) and HAVARTH5 (2021 only) use identical categories and wording. The 2021-only name bump did not reflect a real definition change - safe to treat as one continuous column.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Yes</td><td>139,703</td><td>124,479</td><td>142,541</td><td>151,148</td><td>142,764</td><td>158,319</td><td>121,857</td></tr><tr><td>2</td><td>No</td><td>276,020</td><td>275,176</td><td>293,256</td><td>291,351</td><td>287,999</td><td>296,778</td><td>232,184</td></tr><tr><td>7</td><td>Don't know/Not Sure</td><td>2,286</td><td>1,945</td><td>2,490</td><td>2,264</td><td>2,253</td><td>2,273</td><td>1,871</td></tr><tr><td>9</td><td>Refused</td><td>249</td><td>353</td><td>403</td><td>366</td><td>303</td><td>295</td><td>243</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>10</td><td>5</td><td>3</td><td>3</td><td>4</td><td>5</td><td>3</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="DIABETE4">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#52</span>
+          <h2 class="var-name">DIABETE4</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Verified identical</span>
+        </div>
+        <div class="var-label">(Ever told) you had diabetes</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Chronic Health Conditions</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">(Ever told) (you had) diabetes? (If 'Yes' and respondent is female, ask 'Was this only when you were pregnant?'. If Respondent says pre-diabetes or borderline diabetes, use response code 4.)</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">DIABETE4</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Confirmed via full 2019/2020/2021 parses: DIABETE4's category set (Yes / Yes-during-pregnancy / No / pre-diabetes / DK / Refused) is identical all seven years. This is the target variable - confirmed stable throughout.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Yes</td><td>57,401</td><td>52,094</td><td>57,616</td><td>61,158</td><td>59,786</td><td>65,809</td><td>51,827</td></tr><tr><td>2</td><td>Yes, but female told only during pregnancy'Go to Section 07.01 AGE</td><td>3,782</td><td>3,374</td><td>3,808</td><td>3,836</td><td>3,253</td><td>3,395</td><td>2,671</td></tr><tr><td>3</td><td>No'Go to Section 07.01 AGE</td><td>347,091</td><td>337,064</td><td>366,342</td><td>368,722</td><td>358,706</td><td>376,125</td><td>290,712</td></tr><tr><td>4</td><td>No, pre-diabetes or borderline diabetes'Go to Section 07.01 AGE</td><td>9,149</td><td>8,612</td><td>9,942</td><td>10,329</td><td>10,594</td><td>11,307</td><td>10,166</td></tr><tr><td>7</td><td>Don't know/Not Sure'Go to Section 07.01 AGE</td><td>605</td><td>488</td><td>613</td><td>763</td><td>683</td><td>798</td><td>580</td></tr><tr><td>9</td><td>Refused'Go to Section 07.01 AGE</td><td>231</td><td>320</td><td>369</td><td>321</td><td>296</td><td>232</td><td>196</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>9</td><td>6</td><td>3</td><td>3</td><td>5</td><td>4</td><td>6</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="MARITAL">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#54</span>
+          <h2 class="var-name">MARITAL</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Marital Status</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Demographics</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Are you: (marital status)</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">MARITAL</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Name unchanged since before 2019.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Married</td><td>213,324</td><td>207,302</td><td>227,242</td><td>227,424</td><td>222,210</td><td>229,393</td><td>176,955</td></tr><tr><td>2</td><td>Divorced</td><td>56,426</td><td>51,939</td><td>55,677</td><td>57,516</td><td>55,007</td><td>58,827</td><td>45,343</td></tr><tr><td>3</td><td>Widowed</td><td>50,740</td><td>43,646</td><td>47,275</td><td>48,019</td><td>47,225</td><td>49,161</td><td>40,081</td></tr><tr><td>4</td><td>Separated</td><td>8,661</td><td>7,975</td><td>8,433</td><td>8,702</td><td>8,316</td><td>9,462</td><td>6,881</td></tr><tr><td>5</td><td>Never married</td><td>70,730</td><td>72,051</td><td>77,554</td><td>80,001</td><td>77,124</td><td>84,851</td><td>66,944</td></tr><tr><td>6</td><td>A member of an unmarried couple</td><td>14,903</td><td>15,261</td><td>17,524</td><td>18,668</td><td>19,152</td><td>21,754</td><td>16,045</td></tr><tr><td>9</td><td>Refused</td><td>3,435</td><td>3,772</td><td>4,983</td><td>4,794</td><td>4,282</td><td>4,213</td><td>3,904</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>49</td><td>12</td><td>5</td><td>8</td><td>7</td><td>9</td><td>5</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="EDUCA">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#55</span>
+          <h2 class="var-name">EDUCA</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Education Level</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Demographics</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">What is the highest grade or year of school you completed?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">EDUCA</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Name unchanged since before 2019.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Never attended school or only kindergarten</td><td>619</td><td>560</td><td>606</td><td>676</td><td>687</td><td>723</td><td>491</td></tr><tr><td>2</td><td>Grades 1 through 8 (Elementary)</td><td>9,940</td><td>8,092</td><td>8,259</td><td>8,381</td><td>8,324</td><td>9,226</td><td>6,529</td></tr><tr><td>3</td><td>Grades 9 through 11 (Some high school)</td><td>19,506</td><td>17,596</td><td>17,126</td><td>16,954</td><td>16,161</td><td>17,200</td><td>13,026</td></tr><tr><td>4</td><td>Grade 12 or GED (High school graduate)</td><td>111,890</td><td>107,096</td><td>111,545</td><td>108,990</td><td>106,613</td><td>115,877</td><td>92,036</td></tr><tr><td>5</td><td>College 1 year to 3 years (Some college or technical school)</td><td>116,591</td><td>111,387</td><td>120,102</td><td>120,252</td><td>114,346</td><td>120,732</td><td>93,958</td></tr><tr><td>6</td><td>College 4 years or more (College graduate)</td><td>157,887</td><td>155,340</td><td>178,577</td><td>187,496</td><td>184,867</td><td>191,549</td><td>147,966</td></tr><tr><td>9</td><td>Refused</td><td>1,809</td><td>1,875</td><td>2,473</td><td>2,378</td><td>2,316</td><td>2,356</td><td>2,147</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>26</td><td>12</td><td>5</td><td>5</td><td>9</td><td>7</td><td>5</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="RENTHOM1">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#56</span>
+          <h2 class="var-name">RENTHOM1</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Own or Rent Home</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Demographics</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Do you own or rent your home?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">RENTHOM1</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Name unchanged since before 2019.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Own</td><td>294,035</td><td>280,664</td><td>308,963</td><td>310,708</td><td>301,956</td><td>312,589</td><td>244,237</td></tr><tr><td>2</td><td>Rent</td><td>99,812</td><td>97,305</td><td>103,944</td><td>108,332</td><td>105,960</td><td>118,460</td><td>89,957</td></tr><tr><td>3</td><td>Other arrangement</td><td>21,030</td><td>20,507</td><td>21,187</td><td>21,463</td><td>21,317</td><td>22,677</td><td>18,341</td></tr><tr><td>7</td><td>Don't know/Not Sure</td><td>822</td><td>827</td><td>928</td><td>1,099</td><td>1,048</td><td>1,101</td><td>899</td></tr><tr><td>9</td><td>Refused</td><td>2,544</td><td>2,640</td><td>3,663</td><td>3,521</td><td>3,034</td><td>2,835</td><td>2,716</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>25</td><td>15</td><td>8</td><td>9</td><td>8</td><td>8</td><td>8</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="VETERAN3">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#60</span>
+          <h2 class="var-name">VETERAN3</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Are You A Veteran</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Demographics</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Have you ever served on active duty in the United States Armed Forces, either in the regular military or in a National Guard or military reserve unit?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">VETERAN3</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Name unchanged since before 2019.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Yes</td><td>53,230</td><td>48,221</td><td>52,518</td><td>53,211</td><td>51,008</td><td>52,504</td><td>40,958</td></tr><tr><td>2</td><td>No</td><td>362,639</td><td>351,210</td><td>382,958</td><td>386,272</td><td>379,749</td><td>402,590</td><td>313,001</td></tr><tr><td>7</td><td>Don't know/Not Sure</td><td>151</td><td>143</td><td>182</td><td>208</td><td>204</td><td>187</td><td>160</td></tr><tr><td>9</td><td>Refused</td><td>874</td><td>1,077</td><td>1,399</td><td>1,268</td><td>1,143</td><td>1,154</td><td>1,042</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>1,374</td><td>1,307</td><td>1,636</td><td>4,173</td><td>1,219</td><td>1,235</td><td>997</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="EMPLOY1">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#61</span>
+          <h2 class="var-name">EMPLOY1</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Employment Status</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Demographics</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Are you currently'?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">EMPLOY1</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Name unchanged since before 2019.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Employed for wages</td><td>167,942</td><td>165,872</td><td>186,076</td><td>186,004</td><td>177,871</td><td>186,378</td><td>139,020</td></tr><tr><td>2</td><td>Self-employed</td><td>37,688</td><td>34,921</td><td>37,759</td><td>38,768</td><td>37,923</td><td>39,146</td><td>30,119</td></tr><tr><td>3</td><td>Out of work for 1 year or more</td><td>7,831</td><td>7,232</td><td>11,406</td><td>8,668</td><td>7,668</td><td>8,953</td><td>6,973</td></tr><tr><td>4</td><td>Out of work for less than 1 year</td><td>8,153</td><td>16,409</td><td>9,713</td><td>8,044</td><td>8,976</td><td>10,812</td><td>8,335</td></tr><tr><td>5</td><td>A homemaker</td><td>20,541</td><td>17,080</td><td>17,579</td><td>17,477</td><td>17,521</td><td>17,832</td><td>13,896</td></tr><tr><td>6</td><td>A student</td><td>10,845</td><td>10,730</td><td>10,661</td><td>11,111</td><td>10,244</td><td>11,473</td><td>9,200</td></tr><tr><td>7</td><td>Retired</td><td>128,809</td><td>117,209</td><td>131,546</td><td>137,083</td><td>139,949</td><td>146,916</td><td>119,837</td></tr><tr><td>8</td><td>Unable to work</td><td>29,952</td><td>25,429</td><td>25,702</td><td>26,737</td><td>25,490</td><td>27,758</td><td>21,724</td></tr><tr><td>9</td><td>Refused</td><td>3,648</td><td>4,151</td><td>4,663</td><td>5,044</td><td>4,713</td><td>5,099</td><td>4,364</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>2,859</td><td>2,925</td><td>3,588</td><td>6,196</td><td>2,968</td><td>3,303</td><td>2,690</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="INCOME3">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#63</span>
+          <h2 class="var-name">INCOME3</h2>
+          <span class="badge" style="--badge-color:#c0392b">Verified DIFFERENT</span>
+        </div>
+        <div class="var-label">Income Level</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Demographics</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Is your annual household income from all sources: (If respondent refuses at any income level, code 'Refused.')</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="chip chip-change"><b>2019</b> INCOME2</span><span class="chip"><b>2020</b> INCOME2</span><span class="chip chip-change"><b>2021</b> INCOME3</span><span class="chip"><b>2022</b> INCOME3</span><span class="chip"><b>2023</b> INCOME3</span><span class="chip"><b>2024</b> INCOME3</span><span class="chip"><b>2025</b> INCOME3</span></div>
+      </div>
+
+      <div class="finding-note">Renamed: INCOME2 (2019-2020) → INCOME3 (2021-2025)</div>
+      <div class="finding-detail">Confirmed via full 2019/2020/2021 parses: 2019-2020 (as INCOME2) used only 8 income brackets, topping out at “$75,000 or more.” 2021 onward (INCOME3) uses 11 brackets, up to “$200,000 or more.” Not a pure rename — the scale genuinely changed starting in 2021. See the historical table below for the full 2019-2020 breakdown. Team to decide how to handle before combining years (e.g. collapse 2021-2025 back to the 8-bucket scale, or flag/exclude 2019-2020 for income-based analysis).</div>
+      
+      <div class="recode-box"><div class="recode-title">2019 &amp; 2020 — INCOME2 (8-bracket scheme)</div><p>2019-2020 (as <span class="mono">INCOME2</span>) had only 8 brackets, topping out at “$75,000 or more.” 2021 onward (<span class="mono">INCOME3</span>) has 11 brackets, up to “$200,000 or more.” Shown separately since the brackets aren’t directly comparable — team to decide how to handle before combining years.</p><div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th></tr></thead><tbody><tr><td>1</td><td>Less than $10,000</td><td>15,860</td><td>12,903</td></tr><tr><td>2</td><td>Less than $15,000 ($10,000 to less than $15,000)</td><td>16,122</td><td>13,705</td></tr><tr><td>3</td><td>Less than $20,000 ($15,000 to less than $20,000)</td><td>23,391</td><td>21,048</td></tr><tr><td>4</td><td>Less than $25,000 ($20,000 to less than $25,000)</td><td>30,001</td><td>27,719</td></tr><tr><td>5</td><td>Less than $35,000 ($25,000 to less than $35,000)</td><td>34,496</td><td>31,410</td></tr><tr><td>6</td><td>Less than $50,000 ($35,000 to less than $50,000)</td><td>46,572</td><td>43,851</td></tr><tr><td>7</td><td>Less than $75,000 ($50,000 to less than $75,000)</td><td>54,252</td><td>52,486</td></tr><tr><td>8</td><td>$75,000 or more</td><td>117,793</td><td>118,779</td></tr><tr><td>77</td><td>Don't know/Not sure</td><td>32,654</td><td>30,096</td></tr><tr><td>99</td><td>Refused</td><td>40,246</td><td>42,603</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>6,881</td><td>7,358</td></tr></tbody></table></div></div>
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Less than $10,000</td><td>10,878</td><td>10,341</td><td>9,280</td><td>10,258</td><td>7,723</td></tr><tr><td>2</td><td>Less than $15,000 ($10,000 to &lt; $15,000)</td><td>11,530</td><td>11,031</td><td>9,907</td><td>10,542</td><td>7,971</td></tr><tr><td>3</td><td>Less than $20,000 ($15,000 to &lt; $20,000)</td><td>14,960</td><td>14,300</td><td>12,867</td><td>13,662</td><td>10,285</td></tr><tr><td>4</td><td>Less than $25,000 ($20,000 to &lt; $25,000)</td><td>21,071</td><td>20,343</td><td>18,202</td><td>19,841</td><td>15,257</td></tr><tr><td>5</td><td>Less than $35,000 ($25,000 to &lt; $35,000)</td><td>43,893</td><td>42,294</td><td>38,508</td><td>41,702</td><td>31,691</td></tr><tr><td>6</td><td>Less than $50,000 ($35,000 to &lt; $50,000)</td><td>48,339</td><td>46,831</td><td>47,502</td><td>49,686</td><td>37,977</td></tr><tr><td>7</td><td>Less than $75,000 ($50,000 to &lt; $75,000)</td><td>59,408</td><td>59,148</td><td>57,896</td><td>60,709</td><td>46,329</td></tr><tr><td>8</td><td>Less than $100,000 ($75,000 to &lt; $100,000)</td><td>47,838</td><td>48,436</td><td>49,131</td><td>51,700</td><td>39,932</td></tr><tr><td>9</td><td>Less than $150,000 ($100,000 to &lt; $150,000)</td><td>47,642</td><td>50,330</td><td>52,284</td><td>55,778</td><td>43,403</td></tr><tr><td>10</td><td>Less than $200,000 ($150,000 to &lt; $200,000)</td><td>19,769</td><td>22,553</td><td>24,353</td><td>26,675</td><td>21,174</td></tr><tr><td>11</td><td>$200,000 or more</td><td>18,952</td><td>23,478</td><td>26,770</td><td>29,694</td><td>23,366</td></tr><tr><td>77</td><td>Don't know/Not sure</td><td>36,138</td><td>36,114</td><td>36,316</td><td>37,113</td><td>29,831</td></tr><tr><td>99</td><td>Refused</td><td>49,428</td><td>47,001</td><td>42,232</td><td>41,041</td><td>34,081</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>8,847</td><td>12,932</td><td>8,075</td><td>9,269</td><td>7,138</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="DIFFWALK">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#70</span>
+          <h2 class="var-name">DIFFWALK</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Difficulty Walking or Climbing Stairs</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Disability</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Do you have serious difficulty walking or climbing stairs?</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">DIFFWALK</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Name unchanged since before 2019.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Yes</td><td>71,550</td><td>57,335</td><td>67,557</td><td>68,081</td><td>67,021</td><td>71,425</td><td>56,696</td></tr><tr><td>2</td><td>No</td><td>331,367</td><td>327,864</td><td>351,306</td><td>353,039</td><td>348,452</td><td>365,793</td><td>283,461</td></tr><tr><td>7</td><td>Don't know/Not Sure</td><td>1,177</td><td>1,000</td><td>1,190</td><td>1,221</td><td>1,206</td><td>1,193</td><td>1,022</td></tr><tr><td>9</td><td>Refused</td><td>412</td><td>479</td><td>631</td><td>636</td><td>498</td><td>587</td><td>446</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>13,762</td><td>15,280</td><td>18,009</td><td>22,155</td><td>16,146</td><td>18,672</td><td>14,533</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="SMOKE100">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#93</span>
+          <h2 class="var-name">SMOKE100</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Smoked at Least 100 Cigarettes</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Tobacco Use</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Have you smoked at least 100 cigarettes in your entire life? [Note: 5 packs = 100 cigarettes]</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">SMOKE100</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Name unchanged since before 2019.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Yes</td><td>168,593</td><td>156,750</td><td>167,588</td><td>164,217</td><td>158,774</td><td>167,242</td><td>130,943</td></tr><tr><td>2</td><td>No'Go to Section 11.03 USENOW3</td><td>231,136</td><td>224,535</td><td>246,644</td><td>245,955</td><td>251,981</td><td>258,956</td><td>204,951</td></tr><tr><td>7</td><td>Don't know/Not Sure'Go to Section 11.03 USENOW3</td><td>1,971</td><td>2,178</td><td>2,298</td><td>2,297</td><td>2,251</td><td>2,062</td><td>1,513</td></tr><tr><td>9</td><td>Refused'Go to Section 11.03 USENOW3</td><td>577</td><td>635</td><td>931</td><td>886</td><td>643</td><td>550</td><td>497</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>15,991</td><td>17,860</td><td>21,232</td><td>31,777</td><td>19,674</td><td>28,860</td><td>18,254</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="ALCDAY4">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#102</span>
+          <h2 class="var-name">ALCDAY4</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Verified identical</span>
+        </div>
+        <div class="var-label">Days in past 30 had alcoholic beverage</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Alcohol Consumption</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">During the past 30 days, how many days per week or per month did you have at least one drink of any alcoholic beverage? (A 40 ounce beer would count as 3 drinks, or a cocktail drink with 2 shots would count as 2 drinks.)</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="chip chip-change"><b>2019</b> ALCDAY5</span><span class="chip"><b>2020</b> ALCDAY5</span><span class="chip"><b>2021</b> ALCDAY5</span><span class="chip chip-change"><b>2022</b> ALCDAY4</span><span class="chip"><b>2023</b> ALCDAY4</span><span class="chip"><b>2024</b> ALCDAY4</span><span class="chip"><b>2025</b> ALCDAY4</span></div>
+      </div>
+
+      <div class="finding-note">Renamed: ALCDAY5 (2019-2021) → ALCDAY4 (2022-2025)</div>
+      <div class="finding-detail">Confirmed via full 2019/2020/2021 parses: ALCDAY5 (2019-2021) and ALCDAY4 (2022-2025) use the identical coding scheme (101-107=days/week, 201-230=days/month, 777=DK, 888=none, 999=Refused). Pure rename.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>100</td><td></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>1</td><td>—</td></tr><tr><td>101 - 199</td><td>Days per week</td><td>—</td><td>—</td><td>—</td><td>66,151</td><td>73,255</td><td>66,029</td><td>—</td></tr><tr><td>201 - 299</td><td>Days in past 30 days</td><td>—</td><td>—</td><td>—</td><td>144,740</td><td>139,362</td><td>144,602</td><td>—</td></tr><tr><td>777</td><td>Don't know/Not sure'Go to Section 14.01 FLUSHOT7</td><td>3,139</td><td>3,598</td><td>3,738</td><td>3,447</td><td>2,711</td><td>2,877</td><td>1,864</td></tr><tr><td>888</td><td>No drinks in past 30 days'Go to Section 14.01 FLUSHOT7</td><td>195,326</td><td>183,618</td><td>196,872</td><td>187,667</td><td>190,766</td><td>203,261</td><td>168,774</td></tr><tr><td>999</td><td>Refused'Go to Section 14.01 FLUSHOT7</td><td>1,803</td><td>2,250</td><td>2,364</td><td>2,364</td><td>1,785</td><td>1,679</td><td>1,396</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>18,212</td><td>20,927</td><td>24,487</td><td>40,763</td><td>25,444</td><td>39,221</td><td>23,598</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="_URBSTAT">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#215</span>
+          <h2 class="var-name">_URBSTAT</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Urban/Rural Status</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Urban Rural</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Urban/Rural Status</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">_URBSTAT</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Calculated variable; name unchanged. Category scheme confirmed identical all 7 years.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Urban counties (_URBNRRL = 1,2,3,4,5)</td><td>346,996</td><td>335,728</td><td>369,461</td><td>380,732</td><td>369,363</td><td>383,253</td><td>303,591</td></tr><tr><td>2</td><td>Rural counties (_URBNRRL = 6)</td><td>62,814</td><td>59,103</td><td>62,178</td><td>54,992</td><td>55,637</td><td>59,794</td><td>46,600</td></tr><tr><td>BLANK</td><td>Not defined or Missing</td><td>8,458</td><td>7,127</td><td>7,054</td><td>9,408</td><td>8,323</td><td>14,623</td><td>5,967</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="_HLTHPL2">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#233</span>
+          <h2 class="var-name">_HLTHPL2</h2>
+          <span class="badge" style="--badge-color:#c0392b">Verified DIFFERENT</span>
+        </div>
+        <div class="var-label">Have any health insurance</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Calculated Variables</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Adults who had some form of health insurance</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="chip chip-change"><b>2019</b> HLTHPLN1 (raw)</span><span class="chip"><b>2020</b> HLTHPLN1 (raw)</span><span class="chip chip-change"><b>2021</b> _HLTHPLN</span><span class="chip"><b>2022</b> _HLTHPLN</span><span class="chip chip-change"><b>2023</b> _HLTHPL1</span><span class="chip chip-change"><b>2024</b> _HLTHPL2</span><span class="chip"><b>2025</b> _HLTHPL2</span></div>
+      </div>
+
+      <div class="finding-note">Renamed: HLTHPLN1 (2019-2020, raw question) → _HLTHPLN (2021-2022) → _HLTHPL1 (2023) → _HLTHPL2 (2024-2025)</div>
+      <div class="finding-detail">2021-2025 versions (_HLTHPLN/_HLTHPL1/_HLTHPL2) are confirmed identical to each other: 1=Has insurance, 2=No insurance, 9=DK/Refused/Missing (only the internal source-variable name changes: PRIMINSR → PRIMINS1 → PRIMINS2). 2019-2020's HLTHPLN1 is the RAW yes/no question instead, with DK and Refused as separate codes — see the historical table below (DK and Refused combined into a single row, matching the 2021-2025 scheme) for the full 2019 and 2020 breakdown.</div>
+      <div class="recode-box"><div class="recode-title">2019 &amp; 2020 — raw HLTHPLN1, recoded to match 2021-2025</div><p>2019-2020 only has the raw <span class="mono">HLTHPLN1</span> question (Yes / No / Don’t know / Refused). To line it up with the pre-computed <span class="mono">_HLTHPL2</span>-style flag used from 2021 on, Don’t know and Refused are combined into a single row below, per the requested recoding:</p><div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th></tr></thead><tbody><tr><td>1</td><td>Has insurance</td><td>380,524</td><td>365,862</td></tr><tr><td>2</td><td>No insurance</td><td>35,669</td><td>34,034</td></tr><tr><td>9</td><td>DK/Refused (combined)</td><td>2,066</td><td>2,059</td></tr></tbody></table></div></div>
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Have some form of insurance</td><td>398,081</td><td>404,229</td><td>391,946</td><td>413,720</td><td>321,738</td></tr><tr><td>2</td><td>Do not have some form of health insurance</td><td>23,215</td><td>23,018</td><td>22,703</td><td>25,406</td><td>18,958</td></tr><tr><td>9</td><td>Don't know, refused or missing insurance response</td><td>17,397</td><td>17,885</td><td>18,674</td><td>18,544</td><td>15,462</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="_TOTINDA">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#235</span>
+          <h2 class="var-name">_TOTINDA</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Leisure Time Physical Activity Calculated Variable</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Calculated Variables</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Adults who reported doing physical activity or exercise during the past 30 days other than their regular job</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">_TOTINDA</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Calculated variable; name unchanged. Category scheme confirmed identical all 7 years.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Had physical activity or exercise</td><td>288,516</td><td>305,883</td><td>330,738</td><td>337,559</td><td>325,227</td><td>350,061</td><td>272,901</td></tr><tr><td>2</td><td>No physical activity or exercise in last 30 days</td><td>107,745</td><td>95,393</td><td>107,027</td><td>106,480</td><td>106,845</td><td>106,294</td><td>82,283</td></tr><tr><td>9</td><td>Don't know/Refused/Missing</td><td>22,007</td><td>682</td><td>928</td><td>1,093</td><td>1,251</td><td>1,315</td><td>974</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="_MICHD">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#239</span>
+          <h2 class="var-name">_MICHD</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Ever had CHD or MI</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Calculated Variables</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Respondents that have ever reported having coronary heart disease (CHD) or myocardial infarction (MI)</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">_MICHD</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Calculated variable; name unchanged. Category scheme confirmed identical all 7 years.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Reported having MI or CHD</td><td>36,756</td><td>34,163</td><td>35,323</td><td>39,751</td><td>36,311</td><td>42,338</td><td>31,687</td></tr><tr><td>2</td><td>Did not report having MI or CHD</td><td>377,187</td><td>364,224</td><td>398,735</td><td>400,360</td><td>392,427</td><td>410,126</td><td>320,458</td></tr><tr><td>BLANK</td><td>Not asked or Missing</td><td>4,325</td><td>3,571</td><td>4,635</td><td>5,021</td><td>4,585</td><td>5,206</td><td>4,013</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="_RACE">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#246</span>
+          <h2 class="var-name">_RACE</h2>
+          <span class="badge" style="--badge-color:#c0392b">Verified DIFFERENT</span>
+        </div>
+        <div class="var-label">Computed Race-Ethnicity grouping</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Calculated Race Variables</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Race/ethnicity categories</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="chip chip-change"><b>2019</b> _RACE</span><span class="chip"><b>2020</b> _RACE</span><span class="chip"><b>2021</b> _RACE</span><span class="chip chip-change"><b>2022</b> _RACE1</span><span class="chip chip-change"><b>2023</b> _RACE</span><span class="chip"><b>2024</b> _RACE</span><span class="chip"><b>2025</b> _RACE</span></div>
+      </div>
+
+      <div class="finding-note">Renamed: _RACE (2019-2021) → _RACE1 (2022 ONLY) → _RACE (2023-2025)</div>
+      <div class="finding-detail">CONFIRMED via full 7-year parses: 2019, 2020, 2021, 2023, 2024 and 2025's _RACE use the same 8 categories (separately breaking out American Indian/Alaskan Native, Asian, and Native Hawaiian/Pacific Islander). 2022's comparable variable is _RACE1 (based on _MRACE2, not _MRACE1) — same 8-category scheme, except it has no row for value 6 (“Other race only, non-Hispanic”) that year, so that one cell reads “—” below. (The 2022 codebook also has a separate, further-collapsed 5-category _RACEGR4 — a different variable, not used here.)</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="plain-note">2022's "Freq" column below is sourced from <span class="mono">_RACE1</span>, not <span class="mono">_RACEGR4</span> (a separate, further-collapsed 5-category variable also in the 2022 file — not used here). 2022 has no row for value 6 ("Other race only, non-Hispanic"), so that one cell reads "—".</div><div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022 (_RACE1)</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>White only, non-Hispanic</td><td>310,750</td><td>295,900</td><td>322,705</td><td>320,421</td><td>313,067</td><td>329,346</td><td>258,095</td></tr><tr><td>2</td><td>Black only, non-Hispanic</td><td>31,423</td><td>30,130</td><td>32,772</td><td>35,446</td><td>32,919</td><td>35,172</td><td>26,043</td></tr><tr><td>3</td><td>American Indian or Alaskan Native only, Non-Hispanic</td><td>6,569</td><td>6,813</td><td>7,265</td><td>6,952</td><td>6,795</td><td>6,460</td><td>5,071</td></tr><tr><td>4</td><td>Asian only, non-Hispanic</td><td>9,179</td><td>10,138</td><td>11,408</td><td>13,347</td><td>12,105</td><td>12,646</td><td>9,930</td></tr><tr><td>5</td><td>Native Hawaiian or other Pacific Islander only, Non-Hispanic</td><td>2,379</td><td>2,009</td><td>1,988</td><td>2,414</td><td>2,097</td><td>2,074</td><td>2,247</td></tr><tr><td>6</td><td>Other race only, non-Hispanic</td><td>3,219</td><td>3,344</td><td>3,939</td><td>—</td><td>3,359</td><td>3,737</td><td>2,637</td></tr><tr><td>7</td><td>Multiracial, non-Hispanic</td><td>8,404</td><td>8,314</td><td>9,230</td><td>9,578</td><td>10,125</td><td>10,486</td><td>8,729</td></tr><tr><td>8</td><td>Hispanic</td><td>37,410</td><td>36,322</td><td>38,396</td><td>42,917</td><td>43,286</td><td>48,646</td><td>35,081</td></tr><tr><td>9</td><td>Don't know/Not sure/Refused</td><td>8,932</td><td>8,987</td><td>10,990</td><td>14,055</td><td>9,484</td><td>9,103</td><td>8,322</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="_SEX">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#250</span>
+          <h2 class="var-name">_SEX</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Calculated sex variable</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Calculated Variables</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Calculated sex variable</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">_SEX</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Calculated variable; name unchanged. Category scheme confirmed identical all 7 years.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Male</td><td>189,835</td><td>183,931</td><td>203,760</td><td>209,238</td><td>203,800</td><td>217,507</td><td>168,462</td></tr><tr><td>2</td><td>Female</td><td>228,433</td><td>218,027</td><td>234,933</td><td>235,894</td><td>229,523</td><td>240,163</td><td>187,696</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="_AGEG5YR">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#251</span>
+          <h2 class="var-name">_AGEG5YR</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Reported age in five-year age categories calculated variable</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Calculated Variables</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Fourteen-level age category</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">_AGEG5YR</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Calculated variable; name unchanged. Category scheme confirmed identical all 7 years.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>Age 18 to 24</td><td>25,098</td><td>25,648</td><td>26,025</td><td>26,941</td><td>26,280</td><td>29,692</td><td>23,236</td></tr><tr><td>2</td><td>Age 25 to 29</td><td>20,817</td><td>20,911</td><td>21,623</td><td>21,990</td><td>21,247</td><td>23,705</td><td>18,003</td></tr><tr><td>3</td><td>Age 30 to 34</td><td>23,058</td><td>23,408</td><td>25,724</td><td>25,807</td><td>24,803</td><td>26,237</td><td>19,325</td></tr><tr><td>4</td><td>Age 35 to 39</td><td>24,724</td><td>25,492</td><td>28,559</td><td>28,526</td><td>27,153</td><td>28,804</td><td>21,444</td></tr><tr><td>5</td><td>Age 40 to 44</td><td>24,258</td><td>25,729</td><td>29,435</td><td>29,942</td><td>28,463</td><td>30,899</td><td>22,985</td></tr><tr><td>6</td><td>Age 45 to 49</td><td>26,075</td><td>26,428</td><td>28,391</td><td>28,531</td><td>27,070</td><td>28,968</td><td>22,020</td></tr><tr><td>7</td><td>Age 50 to 54</td><td>31,768</td><td>31,110</td><td>34,086</td><td>33,644</td><td>31,291</td><td>31,698</td><td>23,134</td></tr><tr><td>8</td><td>Age 55 to 59</td><td>38,902</td><td>36,219</td><td>38,009</td><td>36,821</td><td>34,219</td><td>34,936</td><td>26,007</td></tr><tr><td>9</td><td>Age 60 to 64</td><td>44,456</td><td>41,151</td><td>44,298</td><td>44,511</td><td>41,974</td><td>43,387</td><td>32,586</td></tr><tr><td>10</td><td>Age 65 to 69</td><td>45,206</td><td>41,570</td><td>45,762</td><td>47,099</td><td>46,099</td><td>47,701</td><td>37,109</td></tr><tr><td>11</td><td>Age 70 to 74</td><td>41,535</td><td>37,972</td><td>42,920</td><td>43,472</td><td>43,533</td><td>44,774</td><td>35,682</td></tr><tr><td>12</td><td>Age 75 to 79</td><td>29,767</td><td>26,607</td><td>29,747</td><td>32,518</td><td>34,543</td><td>36,803</td><td>31,071</td></tr><tr><td>13</td><td>Age 80 or older</td><td>35,916</td><td>31,456</td><td>34,507</td><td>36,251</td><td>38,869</td><td>41,756</td><td>36,874</td></tr><tr><td>14</td><td>Don't know/Refused/Missing</td><td>6,688</td><td>8,257</td><td>9,607</td><td>9,079</td><td>7,779</td><td>8,310</td><td>6,682</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="_BMI5">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#258</span>
+          <h2 class="var-name">_BMI5</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Stable name</span>
+        </div>
+        <div class="var-label">Computed body mass index</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Calculated Variables</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Body Mass Index (BMI)</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="mono">_BMI5</span> <span class="muted">(same name, all 7 years)</span></div>
+      </div>
+
+      
+      <div class="finding-detail">Calculated variable; name unchanged. Coding (BMI x 100) confirmed consistent all 7 years.</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1 - 9999</td><td>1 or greater</td><td>382,065</td><td>360,601</td><td>391,841</td><td>396,326</td><td>392,788</td><td>414,633</td><td>323,596</td></tr><tr><td>BLANK</td><td>Don't know/Refused/Missing</td><td>36,203</td><td>41,357</td><td>46,852</td><td>48,806</td><td>40,535</td><td>43,037</td><td>32,562</td></tr></tbody></table></div>
+    </section>
+    
+    <section class="var-card" id="_RFDRHV9">
+      <div class="var-head">
+        <div class="var-name-row">
+          <span class="serial">#298</span>
+          <h2 class="var-name">_RFDRHV9</h2>
+          <span class="badge" style="--badge-color:#2f9e6e">Verified identical</span>
+        </div>
+        <div class="var-label">Heavy Alcohol Consumption Calculated Variable</div>
+        <div class="var-meta">
+          <span><b>Section:</b> Calculated Variables</span>
+          <span><b>Type:</b> Num</span>
+        </div>
+        <div class="var-question">Heavy drinkers (adult men having more than 14 drinks per week and adult women having more than 7 drinks per week)</div>
+      </div>
+
+      <div class="name-history">
+        <div class="nh-label">Raw name by year</div>
+        <div class="nh-chips"><span class="chip chip-change"><b>2019</b> _RFDRHV7</span><span class="chip"><b>2020</b> _RFDRHV7</span><span class="chip"><b>2021</b> _RFDRHV7</span><span class="chip chip-change"><b>2022</b> _RFDRHV8</span><span class="chip"><b>2023</b> _RFDRHV8</span><span class="chip chip-change"><b>2024</b> _RFDRHV9</span><span class="chip"><b>2025</b> _RFDRHV9</span></div>
+      </div>
+
+      <div class="finding-note">Renamed: _RFDRHV7 (2019-2021) → _RFDRHV8 (2022-2023) → _RFDRHV9 (2024-2025)</div>
+      <div class="finding-detail">CONFIRMED via full 7-year parses: every version uses the identical threshold and category scheme (men &gt;14 drinks/week, women &gt;7 drinks/week; 1=No, 2=Yes, 9=DK/Refused/Missing - only the internal source-variable name changes, e.g. _DRNKWK1 → _DRNKWK2 → _DRNKWK3).</div>
+      
+      
+
+      <div class="table-caption">Value labels &amp; frequency</div>
+      <div class="table-wrap"><table class="vtable"><thead><tr><th>Value</th><th>Label</th><th>Freq 2019</th><th>Freq 2020</th><th>Freq 2021</th><th>Freq 2022</th><th>Freq 2023</th><th>Freq 2024</th><th>Freq 2025</th></tr></thead><tbody><tr><td>1</td><td>No</td><td>367,264</td><td>347,309</td><td>379,828</td><td>369,122</td><td>376,780</td><td>386,812</td><td>310,920</td></tr><tr><td>2</td><td>Yes</td><td>23,305</td><td>23,958</td><td>23,872</td><td>26,305</td><td>23,718</td><td>24,160</td><td>16,452</td></tr><tr><td>9</td><td>Don't know/Refused/Missing</td><td>27,699</td><td>30,691</td><td>34,993</td><td>49,705</td><td>32,825</td><td>46,698</td><td>28,786</td></tr></tbody></table></div>
+    </section>
+    
+    </main>
+  </div>
+
+  <footer>Sources: 2024 &amp; 2025 BRFSS codebooks (user-provided) &middot; USCODE22_LLCP_102523.HTML &amp; USCODE23_LLCP_021924.HTML (CDC, via project files, extracted before removal) &middot; CDC 2019 codebook (live HTML page, all 31 columns) &middot; CDC 2020 &amp; 2021 codebooks (full PDFs, all 31 columns) &middot; IYEAR combined counts from the full 2,951,202-row 2019-2025 dataset</footer>
+</div>
+
+</body></html>
